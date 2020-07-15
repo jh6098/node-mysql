@@ -9,8 +9,9 @@ let queryUrl = baseUrl+
 let query = 'seoul'
 
 // get 방식으로 호출하라.
-request.get({url : queryUrl + query, json:true}, function(error, rsponse, body){
-    console.log(rsponse.statusCode)
+request.get({url : queryUrl + query, json:true}, function(error, response, body){
+    console.log(response.statusCode)
     console.log(body)
     console.log(body.current.temperature) // 온도만 출력
 })
+// 
