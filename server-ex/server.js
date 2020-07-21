@@ -1,11 +1,39 @@
-// 웹서버 동작시키는 코드
-// http://localhost:3000/ 라고치면 hello world가 나와야됨.
-// 서버가 돌고잇으면 터미널이 멈춰있다.
+// express : 웹 서버를 동작시키는 프레임워크
 const express = require("express");
+const dotenv = require("dotenv");
+const morgan = require("morgan");
+
+const logger = require("./middleware/logger");
+
+// 우리가 만든 라우터 파일 가져온다.
+// (users 관련)
+const bootcamps = require("./routes/bootcamps");
+const users = require("./routes/users");
+
+// 환경 설정 파일의 내용을 로딩한다.
+dotenv.config({ path: "./config/config.env" });
+
+// 웹서버 프레임워크인 익스프레스를 가져온다.
 const app = express();
 
-app.get("/", function (req, res) {
-  res.send("let`s go home");
-});
+// app.use 는 순서가 중요!! 순서대로 실행을 시킵니다. next()로
+// 미들웨어 연결
+app.use(logger);
 
-app.listen(3000);
+app.use(morgan("combined"));
+
+// 라우터 연결 : url의 path 와 라우터 파일과 연결
+app.use("/api/v1/bootcamps", bootcamps);
+
+// 라우터 연결 : url의 path와 라우터 user 연결  (users 관련)
+app.use("/api/v1/users", users);
+
+// 환경설정 파일인, config.env 파일에 있는 내용을 불러오는 방법.
+const PORT = process.env.PORT || 5000;
+
+app.listen(
+  PORT,
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);
+
+// 익스프레스 서버 실행은 : 터미널에서 npm run dev
