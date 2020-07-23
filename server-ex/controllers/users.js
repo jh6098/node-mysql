@@ -17,7 +17,7 @@ exports.createUser = async (req, res, next) => {
   // 비밀번호와 같은 것은,
   // 단방향 암호화(복호화가 불가능)를 해야 한다.
   // 그래야, 복호화가 안되어서, 안전하다.
-  // 1234(원문) => djsj32k2idhj23kkdsjaj  암호화
+  // 1234(원문) => djsj32k2idhj23kkdsjaj  hash는 단방향암호화
   // djsj32k2idhj23kkdsjaj => 1234(원문)  복호화
   const hashedPasswd = await bcrypt.hash(passwd, 8);
 
@@ -143,21 +143,9 @@ exports.changePasswd = async (req, res, next) => {
 };
 
 // @desc  내정보 가져오기
-// @route GET /api/v1/users/:id
+// @route GET /api/v1/users/
 exports.getMyInfo = async (req, res, next) => {
-  let id = req.params.id; // 왜 params일까
+  console.log("내 정보 가져오는 API", req.user);
 
-  let query = `select * from user where id = ${id}`;
-
-  try {
-    [rows] = await connection.query(query);
-    if (rows.length != 1) {
-      res.status(400).json({ success: false });
-    } else {
-      delete rows[0].passwd; // 서버에서 패스워드뺴고 가져오기.
-      res.status(200).json({ success: true, result: rows[0] });
-    }
-  } catch (e) {
-    res.status(500).json({ success: false, error: e });
-  }
+  res.status(200).json({ success: true, result: req.user });
 };

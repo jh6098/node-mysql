@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("../middleware/auth"); //auth란 ?
 const {
   createUser,
   loginUser,
@@ -8,8 +9,8 @@ const {
 
 const router = express.Router(); // 경로입력
 
-router.route("/").post(createUser);
-router.route("/:id").get(getMyInfo);
+//경로가 똑같으면 합칠수가 있다.
+router.route("/").post(createUser).get(auth, getMyInfo);
 router.route("/login").post(loginUser);
 router.route("/change").post(changePasswd);
 
