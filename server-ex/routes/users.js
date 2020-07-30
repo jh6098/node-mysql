@@ -1,17 +1,27 @@
 const express = require("express");
-const auth = require("../middleware/auth"); //auth란 ?
+const auth = require("../middleware/auth");
 const {
   createUser,
   loginUser,
   changePasswd,
   getMyInfo,
+  logout,
+  logoutAll,
+  deleteUser,
+  forgotPasswd,
 } = require("../controllers/users");
 
-const router = express.Router(); // 경로입력
+const router = express.Router();
 
-//경로가 똑같으면 합칠수가 있다.
-router.route("/").post(createUser).get(auth, getMyInfo);
+router
+  .route("/")
+  .post(createUser)
+  .get(auth, getMyInfo)
+  .delete(auth, deleteUser);
 router.route("/login").post(loginUser);
 router.route("/change").post(changePasswd);
+router.route("/logout").post(auth, logout);
+router.route("/logoutAll").post(auth, logoutAll);
+router.route("/forgotpasswd").post(auth, forgotPasswd);
 
 module.exports = router;

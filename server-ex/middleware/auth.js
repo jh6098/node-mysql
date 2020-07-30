@@ -1,6 +1,6 @@
-// token validation 을 하기위해만든 파일.
 // 클라이언트의 헤더에 셋팅된
-// Authorization 값(Token) 을 확인하여 인증한다.
+// Authorization 값(Token) 을 확인하여
+// 인증한다.
 
 const jwt = require("jsonwebtoken");
 const connection = require("../db/mysql_connection");
@@ -8,6 +8,12 @@ const connection = require("../db/mysql_connection");
 const auth = async (req, res, next) => {
   console.log("인증 미들웨어");
   let token = req.header("Authorization");
+  console.log(token);
+  if (!token) {
+    res.status(401).json({ error: "Not token" });
+    return;
+  }
+
   token = token.replace("Bearer ", "");
   console.log(token);
 
@@ -40,7 +46,7 @@ const auth = async (req, res, next) => {
   // 유효한 토큰이 맞으니까, 유저 정보를 db에서 가져옵니다.
   if (isCorrect) {
     query = `select * from user where id = ${user_id}`;
-
+    console.log(query);
     try {
       [rows] = await connection.query(query);
       // 유저 정보를, req에 셋팅해서 next()한다.
@@ -51,6 +57,7 @@ const auth = async (req, res, next) => {
       // 패스워드 정보는 필요없으니, 삭제하고 req에 담아줄것.
       delete user.passwd;
       req.user = user;
+      req.user.token = token;
       next();
     } catch (e) {
       res.status(500).json({ error: "DB 에러" });
