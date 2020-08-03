@@ -1,8 +1,7 @@
 {
   "name": "memo-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "main": "server2.js",
   "scripts": {
     "start": "node server",
     "dev": "nodemon server"
@@ -15,11 +14,15 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1",
+    "express-fileupload": "^1.1.8",
+    "moment": "^2.27.0",
+    "morgan": "^1.10.0",
     "mysql2": "^2.1.0",
+    "path": "^0.12.7",
     "validator": "^13.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
-  }
+  },
+  "description": ""
 }
